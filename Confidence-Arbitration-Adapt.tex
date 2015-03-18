@@ -38,14 +38,9 @@
 
 \begin{abstract}
 Speech recognition confidence-scores quantitatively represent the correctness of
-decoded utterances in a [0,1] range. Confidences are primarily used to accept recognitions
-with scores greater than a threshold and thus contain recognitions from background noise
-or out-of-grammar (OOG) speech. Confidence scores have also been used in other speech applications, 
-(a) Rover where we do multi-system combination, (b) Arbitration where we pick one among multiple 
-simultaneous recognitions, (c) selecting high quality data for unsupervised model training etc. 
-Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. 
-While many speech applications consume confidence scores, we haven't seen adequate focus on directly 
-consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide huge gains across confidence-related tasks and demonstrate that with respect to application to Arbitration, where we present 30\% relative reduction in arbitration metric. We also demonstrate an application of confidence-score in deep-neural-network (DNN) speaker adaptation metric, where we can double relative reduction in word-error-rate (WER) for DNN speaker adaptation on limited data.
+decoded utterances in a [0,1] range. Confidences have primarily been used to filter out recognitions
+with scores below a threshold. They have also been used in other speech applications in \emph{e.g.} Arbitration, ROVER
+and high-quality data selection for model training etc. Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. While many speech applications consume confidence scores, we haven't seen adequate focus on directly consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide big gains across confidence-related tasks. We demonstrate this for Arbitration application, where we obtain 31\% relative reduction in arbitration metric. We additionally demonstrate a novel application of confidence-scores in deep-neural-network (DNN) adaptation, where we can double the relative reduction in word-error-rate (WER) for speaker adaptation on limited data.
 \end{abstract}
 \noindent{\bf Index Terms}: Speech recognition, Confidence scores, Confidence predictors, Classifier, MLP
 
@@ -60,13 +55,13 @@ consuming confidence-features in applications. In this work we build a thesis th
 \section{Rich Confidence-Features for Arbitration}\label{Sec:Arbitration}
 \input{ConfidenceFeatureArbitration}
 
-\section{Confidence-Scores in DNN Speaker Adaptation Framework}\label{sec:Adaptation}
+\section{Confidence-Scores in DNN Speaker Adaptation Framework}\label{Sec:Adaptation}
 \input{DNNAdapt}
 
-\section{Discussion}\label{sec:Discussion}
+\section{Discussion}\label{Sec:Discussion}
 \input{discussion}
 
-\section{Conclusions}\label{sec:conclusion}
+\section{Conclusions}\label{Sec:Conclusion}
 \input{conclusion}
 
 %\newpage

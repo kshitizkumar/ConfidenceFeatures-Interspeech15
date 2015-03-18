@@ -1,17 +1,19 @@
-We discussed the significance of confidence-score in Section~\ref{Sec:Intro} where we mentioned the job of the 
-confidence-classifier is to make an inference on the correctness of recognition events. This is thus a binary
+We discussed the significance of confidence-scores in Section~\ref{Sec:Intro} where we mentioned that
+confidence-classifier makes an inference on the correctness of recognition events. This is thus a binary
 classification problem \cite{Bishop} with the 2-classes in (1) correct recognitions, (2) all incorrect
 recognitions that includes misrecognitions over IG utterances as well any recognition
 from OOG utterances. The classifier is trained from a rich set of confidence-features that we obtain from speech decoding.
-Some of the prominent features are:
+A few of our prominent confidence-features are:
 \begin{enumerate}
-  \item acoustic-model features - we aggregate per-frame acoustic score over a word or an utterance. We also compute scores from acoustic arc transitions. These scores are typically normalized with respect to duration and 
-  \item language-model features - we compute language fanout, perplexity
-  \item noise and silence-model features - we compute features from noise and silence models
-  \item 2nd order features - we can compute weighted average of above features with respect to words in a phrase
-  \item duration features - we can compute number of words in a phrase, word-duration etc.
+  \item acoustic-model features - we aggregate per-frame acoustic score over a word or an utterance. We also compute scores from acoustic arc transitions. These scores are typically normalized for duration.
+  \item language-model features - these include fanout and perplexity features.
+  \item noise and silence-model features - we compute features from noise and silence models.
+  \item 2nd-order features - we compute word-confidence-weighted average of acoustic features in a phrase, see \cite{Posen1}.
+  \item duration features - we compute word-duration and number of words in a phrase etc.
+  \item senone count - count of active senones during decoding.
+  \item confusibility - this indicates confusibility of the best hypothesis
+  \item log-spectra-derived features - we may derive posterior features from speech log-spectra.
 \end{enumerate}
-Some other features may include count of senones from decoding. Above features are appropriately normalized to be robust to speech with different duration and intensity. Though confidence-scores have been used in a number of speech applications, we have seen limited focus on directly consuming confidence-features in the applications. The count of these features is typically 15-20 for a word or for an utterance, so additional memory required to store these features is minimal. Most of the current ASR engine just output recognition text along with confidence. These confidence-features are already computed for the purpose of confidence-score so there is almost no additional work required for extracting confidence-features. Furthermore, these confidence-features also need to be transferred alongwith ASR result to the consumer to these features. Considering a typical speech segment of 4 seconds encoded at 8 kB/second for a total of 32kb, confidence-features just add 60 Bytes to the footprint, thus less than 0.2\% to overall footprint.
+Our features are appropriately normalized to be robust to speech with different duration and intensity. We refer to \cite{Posen1} for additional details to our confidence-classifier architecture and related features. Though a number of speech applications consume confidence-scores, we have seen limited attempts on directly consuming the rich set of confidence-features in those applications. Confidence-scores are obtained from a confidence-classifier trained over a particular collection of training data and grammar, from which we obtain positive tokens from successfully recognized utterances and negatives from incorrect recognitions. 
 
-We set up a large pool of training data, grammar, and obtain positive tokens from successfully recognized utterances and negatives from wrong recognitions. Based on above set of positive and negative features, we build a multi-layer perceptron based classifier (MLP) \cite{Mathan91, Bishop}. This uses a single hidden layer with specified set of nodes and is trained with mean-squared error (MSE) criterion. We can build a classifier for either word or sentence. For word classifier, predictors are aggregated and averaged across a word boundary, similarly predictors are aggregated over a sentence for corresponding classifier.
-Our confidence-features consist of 16 individual features. We refer to \cite{Posen1} for additional details on our confidence classifier architecture.
+Thus confidence-scores are optimized for the purposes of classifying correct and incorrect recognitions. The optimization criterion and corresponding needs can be different for downstream speech applications that currently consume confidence-scores. In this work we motivate a widespread use of the rich set of confidence-features. These features are typically 15-20 for a word or for an utterance, so additional memory required to store these features is minimal. These confidence-features are already computed for the purpose of confidence-score so additional work required for extracting confidence-features is almost none. Furthermore, these confidence-features will also need to be communicated along with ASR result to the downstream consumer - considering a typical speech segment of 4 secs. at 8~kB/sec for a total of 32kB, confidence-features just add 80 Bytes to the communication footprint, thus less than 0.2\% to speech footprint.

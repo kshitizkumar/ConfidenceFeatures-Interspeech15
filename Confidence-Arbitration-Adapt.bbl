@@ -1,0 +1,92 @@
+\begin{thebibliography}{10}
+
+\bibitem{Posen1}
+P.-S. Huang, K.~Kumar, C.~Liu, Y.~Gong, and L.~Deng,
+\newblock ``Predicting speech recognition confidence using deep learning with
+  word identity and score features,''
+\newblock in {\em Proc. of IEEE International Conference on Acoustics, Speech
+  and Signal Processing}, 2013, pp. 7413--7417.
+
+\bibitem{CMsurvey_Jiang_SpeechCommunication06}
+H.~Jiang,
+\newblock ``Confidence measures for speech recognition: A survey,''
+\newblock {\em Speech Communication}, vol. 45, no. 4, pp. 455 -- 470, 2005.
+
+\bibitem{NBest_Wessel_Eurospeech99}
+F.~Wessel, K.~Macherey, and H.~Ney,
+\newblock ``A comparison of word graph and n-best list based confidence
+  measures,''
+\newblock in {\em Proc. of EuroSpeech}, 1999, pp. 315--318.
+
+\bibitem{MaximumEntropyConfidence_White_ICASSP07}
+C.~White, J.~Droppo, A.~Acero, and J.~Odell,
+\newblock ``Maximum entropy confidence estimation for speech recognition,''
+\newblock in {\em IEEE International Conference on Acoustics, Speech and Signal
+  Processing (ICASSP)}, April 2007, vol.~4, pp. 809--812.
+
+\bibitem{Blatz04confidenceestimation}
+J.~Blatz, E.~Fitzgerald, G.~Foster, S.~Gandrabur, C.~Goutte, A.~Kulesza,
+  A.~Sanchis, and N.~Ueffing,
+\newblock ``Confidence estimation for machine translation,''
+\newblock in {\em M. Rollins (ED.), Mental Imagery}. 2004, Yale University
+  Press.
+
+\bibitem{Rose_UV_1995}
+R.C. Rose, B.-H. Juang, and C.H. Lee,
+\newblock ``A training procedure for verifying string hypotheses in continuous
+  speech recognition,''
+\newblock in {\em Proc. of IEEE International Conference on Acoustics, Speech
+  and Signal Processing}, May 1995, vol.~1, pp. 281--284.
+
+\bibitem{Mathan_Rejection_1991}
+L.~Mathan and Laurent Miclet,
+\newblock ``Rejection of extraneous input in speech recognition applications,
+  using multi-layer perceptrons and the trace of hmms,''
+\newblock in {\em Proc. of IEEE International Conference on Acoustics, Speech
+  and Signal Processing}, Apr 1991, pp. 93--96 vol.1.
+
+\bibitem{Sukkar_UV_1996}
+R.A. Sukkar and Chin-Hui Lee,
+\newblock ``Vocabulary independent discriminative utterance verification for
+  nonkeyword rejection in subword based speech recognition,''
+\newblock {\em Speech and Audio Processing, IEEE Transactions on}, vol. 4, no.
+  6, pp. 420--429, Nov 1996.
+
+\bibitem{WordLattice_Kemp_Eurospeech97}
+T.~Kemp and T.~Schaaf,
+\newblock ``Estimating confidence using word lattices,''
+\newblock in {\em Proc. of EuroSpeech}, 1997, pp. 827--830.
+
+\bibitem{Wessel01ney}
+F.~Wessel, R.~Schlüter, K.~Macherey, and H.~Ney,
+\newblock ``Confidence measures for large vocabulary continuous speech
+  recognition,''
+\newblock {\em IEEE Trans. on Speech and Audio Processing}, pp. 288--298, 2001.
+
+\bibitem{Chase_wordand}
+L.~Chase,
+\newblock ``Word and acoustic confidence annotation for large vocabulary speech
+  recognition,''
+\newblock in {\em in Proc. European Conference on Speech Communication
+  Technology}, pp. 815--818.
+
+\bibitem{Weintraub97}
+M.~Weintraub, F.~Beaufays, Z.~Rivlin, Y.~Konig, and A.~Stolcke,
+\newblock ``Neural-network based measures of confidence for word recognition,''
+\newblock in {\em Proc. of IEEE International Conference on Acoustics, Speech
+  and Signal Processing}, 1997, pp. 887--890.
+
+\bibitem{Nuance_Arbitration}
+M.~Georges, S.~Kanthak, and D.~Klakow,
+\newblock ``Accurate client-server based speech recognition keeping personal
+  data on the client,''
+\newblock in {\em Proc. of IEEE International Conference on Acoustics, Speech
+  and Signal Processing}, May 2014, pp. 3271--3275.
+
+\bibitem{Bishop}
+C.~M. Bishop,
+\newblock {\em Pattern Recognition and Machine Learning (Information Science
+  and Statistics)},
+\newblock Springer-Verlag New York, Inc., 2006.
+
+\end{thebibliography}
