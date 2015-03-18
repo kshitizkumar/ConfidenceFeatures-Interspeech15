@@ -1,0 +1,78 @@
+\documentclass[a4paper]{article}
+\usepackage{INTERSPEECH2014,amssymb,amsmath,epsfig, epstopdf}
+%\usepackage[named]{algo}
+%\usepackage[numbered]{algo}
+\setcounter{page}{1}
+\sloppy     % better line breaks
+\ninept
+%SM below a registered trademark definition
+\def\reg{{\rm\ooalign{\hfil
+     \raise.07ex\hbox{\scriptsize R}\hfil\crcr\mathhexbox20D}}}
+
+%% \newcommand{\reg}{\textsuperscript{\textcircled{\textsc r}}}
+\title{Confidence-Features and Confidence-Scores for ASR applications in Arbitration and DNN Speaker Adaptation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% If multiple authors, uncomment and edit the lines shown below.       %%
+%% Note that each line must be emphasized {\em } by itself.             %%
+%% (by Stephen Martucci, author of spconf.sty).                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\makeatletter
+%\def\name#1{\gdef\@name{#1\\}}
+%\makeatother
+%\name{{\em Firstname1 Lastname1, Firstname2 Lastname2, Firstname3 Lastname3,}\\
+%      {\em Firstname4 Lastname4, Firstname5 Lastname5, Firstname6 Lastname6,
+%      Firstname7 Lastname7}}
+%%%%%%%%%%%%%%% End of required multiple authors changes %%%%%%%%%%%%%%%%%
+
+\makeatletter
+\def\name#1{\gdef\@name{#1\\}}
+\makeatother \name{{\em Kshitiz Kumar, Ziad Al Bawab, Yong Zhao, Chaojun Liu, Yifan Gong}}
+
+\address{Microsoft Corporation, Redmond, WA \\
+{\small \tt \{kshitiz.kumar, Ziadal, yonzhao, Chaojunl, yifan.gong\}@microsoft.com}}
+
+%
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Speech recognition confidence-scores quantitatively represent the correctness of
+decoded utterances in a [0,1] range. Confidences are primarily used to accept recognitions
+with scores greater than a threshold and thus contain recognitions from background noise
+or out-of-grammar (OOG) speech. Confidence scores have also been used in other speech applications, 
+(a) Rover where we do multi-system combination, (b) Arbitration where we pick one among multiple 
+simultaneous recognitions, (c) selecting high quality data for unsupervised model training etc. 
+Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. 
+While many speech applications consume confidence scores, we haven't seen adequate focus on directly 
+consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide huge gains across confidence-related tasks and demonstrate that with respect to application to Arbitration, where we present 30\% relative reduction in arbitration metric. We also demonstrate an application of confidence-score in deep-neural-network (DNN) speaker adaptation metric, where we can double relative reduction in word-error-rate (WER) for DNN speaker adaptation on limited data.
+\end{abstract}
+\noindent{\bf Index Terms}: Speech recognition, Confidence scores, Confidence predictors, Classifier, MLP
+
+%
+\section{Introduction}\label{Sec:Intro}
+\input{Introduction}
+
+\section{Background on Confidence-Features and Confidence-Scores}\label{Sec:CC-Background}
+\input{BackgroundConfidence}
+
+
+\section{Rich Confidence-Features for Arbitration}\label{Sec:Arbitration}
+\input{ConfidenceFeatureArbitration}
+
+\section{Confidence-Scores in DNN Speaker Adaptation Framework}\label{sec:Adaptation}
+\input{DNNAdapt}
+
+\section{Discussion}\label{sec:Discussion}
+\input{discussion}
+
+\section{Conclusions}\label{sec:conclusion}
+\input{conclusion}
+
+%\newpage
+%
+%\eightpt
+\bibliographystyle{IEEEbib}
+\bibliography{strings}
+\end{document}
+

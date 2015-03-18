@@ -1,0 +1,86 @@
+Speech recognition confidence-scores quantitatively represent the correctness of
+decoded utterances in a [0,1] range. Confidences are primarily used to accept recognitions
+with scores greater than a threshold and thus contain recognitions from background noise
+or out-of-grammar (OOG) speech. Confidence scores have also been used in other speech applications, 
+(a) Rover where we do multi-system combination, (b) Arbitration where we pick one among multiple 
+simultaneous recognitions, (c) selecting high quality data for unsupervised model training etc. 
+Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. 
+While many speech applications consume confidence scores, we haven't seen adequate focus on directly 
+consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide huge gains across confidence-related tasks and demonstrate that with respect to application to Arbitration, where we present 30\% relative reduction in arbitration metric. We also demonstrate an application of confidence-score in deep-neural-network (DNN) speaker adaptation metric, where we can double relative reduction in word-error-rate (WER) for DNN speaker adaptation on limited data.
+
+
+%%\vspace{-3mm}
+%\begin{equation}
+%x(t) = s(f_\omega(t))
+%\label{eq1}
+%\end{equation}
+%where \(f_\omega(t)\) is a special warping function
+%\begin{equation}
+%f_\omega(t)=\frac{1}{2\pi j}\oint_C \frac{\nu^{-1k}d\nu}
+%{(1-\beta\nu^{-1})(\nu^{-1}-\beta)}
+%\label{eq2}
+%\end{equation}
+%A residue theorem states that
+%\begin{equation}
+%\oint_C F(z)dz=2 \pi j \sum_k Res[F(z),p_k]
+%\label{eq3}
+%\end{equation}
+%Applying (\ref{eq3}) to (\ref{eq1}),
+%it is straightforward to see that
+%\begin{equation}
+%1 + 1 = \pi
+%\label{eq4}
+%\end{equation}
+%
+%\begin{figure}[t]
+%\centerline{\epsfig{figure=figure,width=80mm}}
+%\caption{{\it Schematic diagram of speech production.}}
+%\label{spprod}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+
+%
+%\begin{algorithm}{IfForWhile}{
+%\label{algo:ifforwhile}
+%\qcomment{demonstrates control structures}}
+%\qfor $i \qlet 1$ \qto $n$ \\
+%\qdo $x_{i} \qlet x_{i}^{2}$; \\
+%$y_{i} \qlet x_{i} - y_{i}$ \qrof\\
+%\qif $A = B$ \label{line:ifAisB}\\
+%\qthen do whatever is necessary if $A$ equals $B$\\
+%\qelse do something else\\
+%and wait for better times \qfi\\
+%\qwhile $Q \neq \emptyset$ \\
+%\qdo let $q$ be the first element of $Q$ and remove it from $Q$\\
+%do something with $q$ \qend \\
+%\qrepeat \\
+%do something really weird
+%\quntil you get sufficiently tired of it\\
+%\qreturn $42$
+%\end{algorithm}
+
+
+%\begin{algorithm}
+%\SetAlgoLined
+%\KwData{this text}
+%\KwResult{how to write algorithm with \LaTeX2e }
+%initialization\;
+%\While{not at end of this document}{
+%read current\;
+%\eIf{understand}{
+%go to next section\;
+%current section becomes this one\;
+%}{
+%go back to the beginning of current section\;
+%}
+%}
+%\caption{How to write algorithms}
+%\end{algorithm}

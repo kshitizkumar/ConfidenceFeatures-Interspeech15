@@ -1,0 +1,74 @@
+Arbitration is an application where we expect to select the best among one of the multiple simultaneous ASR results.
+We explain our arbitration framework for Microsoft Cortana experience on smart devices in Fig.~\ref{Fig:Arbitration}, there we select the best result between Client and Service side results. Client engine is designed to work with traditional client scenarios like \emph{call, digit dialing, text, open applications etc.} and service engine works for rest of the speech scenarios including \emph{dication, voice-search, weather etc.}. By design the client and service cater to distinct speech scenarios and contain language-model and acoustic-model optimized for those tasks. Though we have distinct acoustic models that cater to client and service speech scenarios, they both work together in a unified way and indistinct for the user as we obviously don't expect user
+to provide us inputs on whether his scenario is for client or for service. Arbitration is the key speech component that provides this unified experience for user by selecting the best among the client and service results.  So although the client and service engines are designed for their own respective scenarios, they listen to speech from potentially all scenarios and produce respective recognition results, these results are consumed by arbitration where it selects the best between the client and service results. 
+
+Arbitration sends the results back to client where a decision unit at client will typically provide the arbitrated result to the user on their smart devices. There can be a few scenarios where the decision unit can simply choose the client recognition viz. (a)  
+If the client confidence-scores are higher than a present threshold - typically the process of getting the arbitrated ASR result back from service may incur some latency so client can simply choose client ASR result if it's very confidence about it, (b) when we have no connection to service - in these cases user can at least make use of client side speech applications from Microsoft or other $3^{rd}$-party applications. This framework also allows us to cater to scenarios where a user says: ``text Alex, I will be late". There client engine has access to contacts and can recognize the person name ``Alex" and produce a result like ``text Alex ...", then ``..." will be filled in by recognition from service.
+
+As noted in Fig.~\ref{Fig:Arbitration}, speech from user is sent to both client and service, where they both produce ASR results under the constraint of their respective engine, AM and LM. Client AM contains garbage paths that greatly help absorb utterances are intended for service only and thus are out-of-grammar (OOG) for client.
+
+
+\subsection{Arbitration Classifier and Baseline Features}\label{Sec:ArbitrationCC}
+Brief description of current arbitration framework, and current useful features
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=0.47\textwidth]{Arbitration}}
+\caption{\it Arbitration for client and service ASR resuls.}
+\label{Fig:Arbitration}
+\end{figure}
+
+\subsection{Incorporating Confidence-Features in Arbitration}
+We described our arbitration framework and the baseline features in \ref{Sec:ArbitrationCC}, there we mentioned a number of features that we found very relevant for arbitration. In this section, we build a thesis on extracting the rich set of confidence-features and propagating them for use in arbitration. We first note that although our arbitration baseline features provide very useful information, the confidence-features provide additional information in terms of noise, silence, acoustic and language-model scores, all this is expected to useful for arbitration. We also note that although confidence-scores from both client and service is used by arbitration, and expected to provide a good gist of confidence-features, we can still benefit a lot with directly using confidence-features by, (a) using much more gradual information in terms of 15-20 confidence-features vs. using a single confidence-score, (b) confidence-scores are designed to optimize the performance confidence-classifier which is clearly different from arbitration, so retraining with the confidence-features can help, (c) arbitration and confidence-classifier may be trained over different datasets, so the information encapsulated by confidence-score may not generalize to dataset relevant for arbitration, (d) confidence-scores are language-specific as they may have been individually trained across a set of \emph{AM, LM, locals, dataset}, in contract we have noted that the various inherent normalizations in confidence-features make them robust across locals, so using confidence-features can allow us to build an arbitration classifier from one local that can provide good performance for other unseen locals, this can be specially useful when we may need to bootstrap arbitration from a local under limited data scenarios, (e) using confidence-score in arbitration creates a dependency for arbitration on confidences, any update to confidence-classifiers potentially requires retraining arbitration, we can completely alleviate this issue if we directly consume confidence-features in arbitration while not using confidence-score feature, this decouples arbitration and confidence-classifiers, letting us independently update confidence-classifier without impacting arbitration.
+
+We demonstrate our approach that uses the rich confidence-features for arbitration in Fig.~\ref{Fig:Arbitration}. We build the infrastructure required to extract confidence-features from both client and service engine, and send them both to arbitration. As expected we require little work for additionally communicating service confidence-features to arbitration. For client, we need to additionally send about 30 bytes-per-second of data, this is only about 0.2\% relative increase to our payload from client to service. Depending on application and need, arbitration can be retrained and deployed with confidence-features from (a) just client, (b) just service, (c) both client and service. 
+
+% 3 second, 4 words, 20 float features = 20 * 4 = 80 bytes = 30bytes/sec
+% speech data = 8000 bytes
+
+\subsection{Arbitration Experiments and Results}\label{Sec:ArbitrationResults}
+We present and analyze results from using confidence-features in arbitration as discussed in Sec.~\ref{Sec:Arbitration}.
+Our arbitration was trained from over 35k speech utterances. Testing was done on over 25k utterances. 
+We decoded these utterances against both client and service engines and obtained corresponding recognition results.
+We had ground-truth transcriptions for these utterances and created their classification targets in terms of client or service based on the WER criterion. We obtained the arbitration baseline-features that included confidence-score, and additionally obtained confidence-features from both client and service. Note that ideally clients will have distinct personalized grammars with their own contact names, application names etc. For our purposes we simulated client grammar with each over 250 names in contacts and used these grammars in decoding. We followed the existing framework for training arbitration classifier where we additionally used confidence-features.
+
+Next, we demonstrate the value in client confidence-features in Fig.~\ref{Fig:PhrasePreds-Hist}, there we plot features distribution for a few features for arbitration task. There ``correct" refers to cases where client wins, and ``InCorrect" refers to service wins, ``Confidence-Score" indicates usual client confidence-score. We visually see that some of the features much better separate the 2 classes than confidence-score.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=0.5\textwidth]{PhrasePreds-Hist.eps}}
+\caption{\it Mapping to normalize confidences.}
+\label{Fig:PhrasePreds-Hist}
+\end{figure}
+
+Next we provide receiver-operating-curve (ROC) for baseline and with including client confidence-features in Fig.~\ref{Fig:Baseline-ClientPred-ROC}, where we note a strongly better ROC curve through the range of curve. In this arbitration task, ``False Positive" (FP) indicates incorrect wins from client and ``True Positive" (TP) indicates correct wins from service. Specifically at FP of 0.1, we can improve TP from 0.81 to 0.86, for a 26\% relative reduction in (1-TP). We note correct area-under-the-curve (AUC) metrics in Table~\ref{tab:AUC_ROC}, where including client confidence-features improved AUC from 0.927 for baseline to 0.946, additionally including server confidence-features improved AUC to 0.95 for a 31.5\% relative reduction in (1-AUC) metric.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=0.47\textwidth]{Baseline-ClientPred-ROC}}
+\caption{\it Mapping to normalize confidences.}
+\label{Fig:Baseline-ClientPred-ROC}
+\end{figure}
+
+\begin{table}
+\begin{center}
+\begin{small}
+\caption{Area-under-the-curve (AUC) for ROC chart} \label{tab:AUC_ROC}
+\begin{tabular}{|l|c|c|}
+\hline
+Method & AUC & relative reduction in \\
+& & (1-AUC) [\%]\\
+\hline
+Baseline Features & 0.927 & - \\
+\hline
++ Client Confidence-Features & 0.946 & 26.0\\
+\hline
++ Client and Service & &\\
+~~Confidence-Features & 0.950 & 31.5\\
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\end{table}
+
+Our arbitration classifier ranks all of it's features in the order of importance. As expected we see that the confidence-features appear prominently in the top features, with 7 of the top-10 overall features being confidence-features. This further demonstrates that the proposed features outperform the baseline features.
