@@ -1,5 +1,5 @@
 \documentclass[a4paper]{article}
-\usepackage{INTERSPEECH2014,amssymb,amsmath,epsfig, epstopdf}
+\usepackage{INTERSPEECH2015,amssymb,amsmath,epsfig, epstopdf}
 %\usepackage[named]{algo}
 %\usepackage[numbered]{algo}
 \setcounter{page}{1}
@@ -27,10 +27,10 @@
 
 \makeatletter
 \def\name#1{\gdef\@name{#1\\}}
-\makeatother \name{{\em Kshitiz Kumar, Ziad Al Bawab, Yong Zhao, Chaojun Liu, Yifan Gong}}
+\makeatother \name{{\em Kshitiz Kumar, Ziad Al Bawab, Yong Zhao, Chaojun Liu, Benoit Dumoulin, Yifan Gong}}
 
 \address{Microsoft Corporation, Redmond, WA \\
-{\small \tt \{kshitiz.kumar, Ziadal, yonzhao, Chaojunl, yifan.gong\}@microsoft.com}}
+{\small \tt \{Kshitiz.Kumar, Ziadal, Yonzhao, Chaojunl, Bedumoul, Yifan.Gong\}@microsoft.com}}
 
 %
 \begin{document}
@@ -38,9 +38,7 @@
 
 \begin{abstract}
 Speech recognition confidence-scores quantitatively represent the correctness of
-decoded utterances in a [0,1] range. Confidences have primarily been used to filter out recognitions
-with scores below a threshold. They have also been used in other speech applications in \emph{e.g.} Arbitration, ROVER
-and high-quality data selection for model training etc. Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. While many speech applications consume confidence scores, we haven't seen adequate focus on directly consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide big gains across confidence-related tasks. We demonstrate this for Arbitration application, where we obtain 31\% relative reduction in arbitration metric. We additionally demonstrate a novel application of confidence-scores in deep-neural-network (DNN) adaptation, where we can double the relative reduction in word-error-rate (WER) for speaker adaptation on limited data.
+decoded utterances in a [0,1] range. Confidences have primarily been used to filter out recognitions with scores below a threshold. They have also been used in other speech applications in \emph{e.g.} Arbitration, ROVER and high-quality data selection for model training etc. Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. While many speech applications consume confidence scores, we haven't seen adequate focus on directly consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide big gains across confidence-related tasks. We demonstrate this for Arbitration application, where we obtain 31\% relative reduction in arbitration metric. We additionally demonstrate a novel application of confidence-scores in deep-neural-network (DNN) adaptation, where we can nearly double the relative reduction in word-error-rate (WER) for speaker adaptation on limited data.
 \end{abstract}
 \noindent{\bf Index Terms}: Speech recognition, Confidence scores, Confidence predictors, Classifier, MLP
 
@@ -67,7 +65,24 @@ and high-quality data selection for model training etc. Confidence-scores are co
 %\newpage
 %
 %\eightpt
-\bibliographystyle{IEEEbib}
+\bibliographystyle{IEEEtran}
 \bibliography{strings}
 \end{document}
 
+%(1)
+% we had confidence score - used as a feature for 
+% instead of using confidne, features to derive better motivation
+
+% (2) 
+% CC vs arbitration CC
+
+% meta information about faetures (in abstract)
+
+% difference between classifier and arbitration CC
+% (3)
+% some semantic features related to reco
+
+% description of figure y-axis histogram
+
+% personal assistant vs. Cortana (mention in ppt)
+% server does good but not as good as client in call scenarios
