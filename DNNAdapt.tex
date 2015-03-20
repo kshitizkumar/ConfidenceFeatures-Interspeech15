@@ -1,4 +1,7 @@
-In this sec. we present a new application of confidence-scores in the DNN adaptation framework. We have huge gains in WER across many scenarios with the deployment of DNNs but we have also established that speaker adaptation of DNN models provides a significant scope for further improvements. In this section, we present our baseline speaker adaptation approach and propose to additionally include confidence-scores in speaker adaptation with limited and large adaptation data scenarios. We have noted that confidence-scores imply the correctness of recognition results. In the context of speaker-adaptation confidence-scores also indicate a degree of match between the speaker-dependent data and speaker-independent model, thus smaller confidence-scores imply weaker match between data and model. So we can leverage confidence-score in the DNN speaker adaptation optimization by disproportionately weighting optimization criterion across data based on their confidence-scores. We create a new recipe where we collect adaptation data into 3 buckets depending on low, medium and high confidence-scores. Our goal is to change the optimization metric by including confidence-scores. Corresponding to the 3 confidence-categories we can weight the data samples from those categories according to specified values for those categories.
+% In this section, we present a new application of confidence-scores in the DNN adaptation framework. 
+Recent successes in adopting CD-DNN-HMMs have achieved great success across various scenarios and datasets in speech recognition. Despite the advances by DNNs, we have also established that the development of speaker adaption techniques for CD-DNN-HMMs provides a significant scope for further improvements. 
+In \cite{xue-2014}, we have proposed the SVD bottleneck adaptation by adapting all the linear bottleneck layers in the SVD-restructured model. This technique involves much less adaptation parameters, while providing significant accuracy improvement.
+In this section, we propose to additionally include confidence-scores in speaker adaptation with limited and large adaptation data scenarios. We have noted that confidence-scores imply the correctness of recognition results. In the context of speaker-adaptation confidence-scores also indicate a degree of match between the speaker-dependent data and speaker-independent model, thus smaller confidence-scores imply weaker match between data and model. So we can leverage confidence-score in the DNN speaker adaptation optimization by disproportionately weighting optimization criterion across data based on their confidence-scores. We create a new recipe where we collect adaptation data into 3 buckets depending on low, medium and high confidence-scores. Our goal is to change the optimization metric by including confidence-scores. Corresponding to the 3 confidence-categories we can weight the data samples from those categories according to specified values for those categories.
 
 We know that confidence can indicate a great deal about the quality of utterances that we use in adaptation but none of the current adaptation recipes include confidence, specifically: for incorrect hypothesis, (a) low confidence data is a poor match to model and may benefit with higher weight on the data, (b) low confidence results are likely to be incorrect, so we should deemphasize these utterances, (c) high confidence data is already a good match to model, so there is less to learn from that data, (d) high confidence results are likely to be correct, so we should emphasize these utterances.
 
@@ -8,9 +11,16 @@ Applied this recipe to training and testing on 6 speaker adaptation data on SMD 
 Based on experiments selected a recipe that simply duplicates the low and medium confidence buckets while retaining the high confidence bucket. Noting results for unsupervised and supervised adaptation in below
 
 \subsection{DNN adaptation experiment}
-Training vs test Dataset
-Server task
-Large LM
+The proposed adaptation method was evaluated on short message dictation (SMD) tasks and compared with the SVD bottleneck adaptation.
+The baseline SI models were trained with 300 hours VS and SMD data. The input feature to CD-DNN-HMM system is a 24-dimension mean-normalized log-filter bank feature with up to second-order derivatives and a context window of 11 frames, forming a vector of 792-dimension ($72 \times 11$) input. On top of the input layer there are 5 hidden layers with 2,048 units for each. The output layer has a dimension of 5,976.
+We convert the full-rank DNN model to low-rank model by doing SVD on all the matrices except the one between the input and the first hidden layer, and keep 40\% of total singular values. The numbers of units on the linear layers after SVD are 208, 184, 176, 200, and 344 accordingly, from bottom to top. We then retrained the low-rank model and obtained comparable accuracy to the full-rank model. More details of SVD based low-rank DNN model training can be found in \cite{xue-2013}.
+
+The initial experiments were conducted on a SMD task which consists of 7 speakers.
+The total number of test set words is 20,203. There is no overlap among the development and test data.
+The baseline low-rank SI system achieves 21.43\% WER averaged on 7 speakers.
+The DNN models are adapted in both supervised and unsupervised way, where the SI model is used to decode and align the development data.
+We varied the number of adaptation utterances from 5 (32 seconds) to 200 (22 minutes) for each speaker.
+
 Any difference of above 1\% relative is significant.
 
 
