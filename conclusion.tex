@@ -1,13 +1,4 @@
-Speech recognition confidence-scores quantitatively represent the correctness of
-decoded utterances in a [0,1] range. Confidences are primarily used to accept recognitions
-with scores greater than a threshold and thus contain recognitions from background noise
-or out-of-grammar (OOG) speech. Confidence scores have also been used in other speech applications, 
-(a) Rover where we do multi-system combination, (b) Arbitration where we pick one among multiple 
-simultaneous recognitions, (c) selecting high quality data for unsupervised model training etc. 
-Confidence-scores are computed from a rich set of confidence-features in the speech recognition engine. 
-While many speech applications consume confidence scores, we haven't seen adequate focus on directly 
-consuming confidence-features in applications. In this work we build a thesis that additionally consuming confidence-features can provide huge gains across confidence-related tasks and demonstrate that with respect to application to Arbitration, where we present 30\% relative reduction in arbitration metric. We also demonstrate an application of confidence-score in deep-neural-network (DNN) speaker adaptation metric, where we can double relative reduction in word-error-rate (WER) for DNN speaker adaptation on limited data.
-
+Confidence-scores have been used across speech applications in ROVER, arbitration, selecting high quality data for unsupervised model training, and key-word spotting etc. Confidence-scores are computed over a rich set of confidence-features in the speech recognition engine. While a number of downstream speech applications consume confidence scores, we haven't seen adequate focus on directly consuming confidence-features in those applications. We proposed that additionally consuming confidence-features can provide huge gains for confidence-related tasks and demonstrate that with respect to arbitration, where we obtained 31\% relative reduction in AUC metric. Furthermore, using confidence-features help decouple confidence-classifier and arbitration; this avoids a dependency on updating arbitration whenever we update confidence-classifier. We also demonstrate an application of confidence-scores in DNN speaker adaptation. Based on experiments we emphasize data with low confidence, this doubled WERR for DNN speaker adaptation on limited data scenarios.
 
 %%\vspace{-3mm}
 %\begin{equation}

@@ -1,34 +1,30 @@
-% In this section, we present a new application of confidence-scores in the DNN adaptation framework. 
-Recent successes in adopting CD-DNN-HMMs have achieved great success across various scenarios and datasets in speech recognition. Despite the advances by DNNs, we have also established that the development of speaker adaption techniques for CD-DNN-HMMs provides a significant scope for further improvements. 
-In \cite{xue-2014}, we have proposed the SVD bottleneck adaptation by adapting all the linear bottleneck layers in the SVD-restructured model. This technique involves much less adaptation parameters, while providing significant accuracy improvement.
-In this section, we propose to additionally include confidence-scores in speaker adaptation with limited and large adaptation data scenarios. We have noted that confidence-scores imply the correctness of recognition results. In the context of speaker-adaptation confidence-scores also indicate a degree of match between the speaker-dependent data and speaker-independent model, thus smaller confidence-scores imply weaker match between data and model. So we can leverage confidence-score in the DNN speaker adaptation optimization by disproportionately weighting optimization criterion across data based on their confidence-scores. We create a new recipe where we collect adaptation data into 3 buckets depending on low, medium and high confidence-scores. Our goal is to change the optimization metric by including confidence-scores. Corresponding to the 3 confidence-categories we can weight the data samples from those categories according to specified values for those categories.
+%Recent successes in adopting DNNs have achieved great success across various scenarios and datasets in speech recognition. 
+In~\cite{XueSVDAdaptation}, we established that speaker adaption techniques can provide significant improvements to state-of-the-art DNNs-based ASR. There, we also proposed singular-value-decomposition (SVD) bottleneck adaptation, this technique involves much less adaptation parameters, while providing significant accuracy improvement.
+In this section we propose to embed confidence-scores in DNN adaptation. We noted that confidence-scores imply the correctness of recognition results. In the context of speaker-adaptation confidence-scores indicate a degree of match between the speaker-specific data and speaker-independent (SI) model, thus smaller confidence-scores imply weaker match between data and model, so speaker adaptation can benefit with emphasizing data with low confidence-scores. We propose to include a weight $c(x_t)$ to standard negative cross entropy criterion ~\cite{rumelhart1988learning} in below:
+%We leverage confidence-scores in adaptation by weighting data with corresponding confidence-score in DNN optimization.
 
-We know that confidence can indicate a great deal about the quality of utterances that we use in adaptation but none of the current adaptation recipes include confidence, specifically: for incorrect hypothesis, (a) low confidence data is a poor match to model and may benefit with higher weight on the data, (b) low confidence results are likely to be incorrect, so we should deemphasize these utterances, (c) high confidence data is already a good match to model, so there is less to learn from that data, (d) high confidence results are likely to be correct, so we should emphasize these utterances.
-
-For 50 utts we can improve WERR from 11.6\% to 14.1\% for supervised adaptation.
-
-Applied this recipe to training and testing on 6 speaker adaptation data on SMD task
-Based on experiments selected a recipe that simply duplicates the low and medium confidence buckets while retaining the high confidence bucket. Noting results for unsupervised and supervised adaptation in below
+\begin{equation}
+D = \frac{1}{N} \sum_{t=1}^{N}c(x_t)\sum_{s_t=1}^{S} \tilde{p}(s_t|x_t) \log p(s_t|x_t)
+\end{equation}
+There for frame $t$, $x_t$ indicates input vector to DNN. Our proposed weights $c(x_t)$ depend on the confidence-scores associated with feature $x_t$. We group all adaptation data into 3 categories based on low, medium and high confidence-scores. We specify $c(x_t)$=$2$ for data associated with low confidence scores, and retain $c(x_t)$=$1$ for data associated with medium and high confidence-scores. In general we can specify other appropriate values for $c(x_t)$, though we found that above values of $c(x_t)$ provided consistently strong performance. Note that the baseline that doesn't embed confidence-scores is equivalent to retaining $c(x_t)$=$1$ for all data.
 
 \subsection{DNN adaptation experiment}
-The proposed adaptation method was evaluated on short message dictation (SMD) tasks and compared with the SVD bottleneck adaptation.
-The baseline SI models were trained with 300 hours VS and SMD data. The input feature to CD-DNN-HMM system is a 24-dimension mean-normalized log-filter bank feature with up to second-order derivatives and a context window of 11 frames, forming a vector of 792-dimension ($72 \times 11$) input. On top of the input layer there are 5 hidden layers with 2,048 units for each. The output layer has a dimension of 5,976.
-We convert the full-rank DNN model to low-rank model by doing SVD on all the matrices except the one between the input and the first hidden layer, and keep 40\% of total singular values. The numbers of units on the linear layers after SVD are 208, 184, 176, 200, and 344 accordingly, from bottom to top. We then retrained the low-rank model and obtained comparable accuracy to the full-rank model. More details of SVD based low-rank DNN model training can be found in \cite{xue-2013}.
+We evaluated our approach on short message dictation (SMD) task and applied SVD bottleneck adaptation. The baseline SI models were trained with 300 hours VS and SMD data. Our core features are 66-dim dynamic Log-Mel-Filterbank features. We use a context window of 11 frames for a total of 726-dim input vector to DNN that has 5 hidden layers with 2,048 nodes each. The output layer has 6000 nodes. Additional details on the experimental setup can be seen in \cite{XueSVDAdaptation}. Our test set consisted of a SMD task with 6 speakers. The total number of test set words is 20,203. The baseline low-rank SI system achieves 19.93\% word-error rate (WER); we also obtained confidence-scores by decoding against SI model. We varied the number of adaptation utterances from 20 (2.2 minutes) to 100 (11 minutes) for each speaker. 
 
-The initial experiments were conducted on a SMD task which consists of 7 speakers.
-The total number of test set words is 20,203. There is no overlap among the development and test data.
-The baseline low-rank SI system achieves 21.43\% WER averaged on 7 speakers.
-The DNN models are adapted in both supervised and unsupervised way, where the SI model is used to decode and align the development data.
-We varied the number of adaptation utterances from 5 (32 seconds) to 200 (22 minutes) for each speaker.
+We note results for supervised adaptation using ground-truth transcriptions in Table~\ref{tab:sup-WER}. There for 20 utts.~adaptation data we double the word-error rate relative reduction (WERR) from 1.5\% to 5\% when including confidence-scores in adaptation with $c(x_t)$=$2$ for low confidence data, and otherwise $c(x_t)$=$1$. We also experimented with emphasizing medium and high confidence data, and few other combinations but we found that above values of $c(x_t)$ provided consistently better results. This is understandable as here we are emphasizing DNN to learn from data that is currently a weaker match to the SI model. Medium and high confidence data is already a good match to model, so we may not learn a lot by emphasizing those data segments. Confidence-scores have also been for data selection~\cite{zhang2014semi} and model training in \cite{gollan2008confidence} but the focus was mostly on data with high confidence; our results provide a new dimension to the use of confidence-scores where we emphasize data with low confidence-scores. In Table~\ref{tab:sup-WER}, we also see strong gains for 50 and 100 utts. adaptation data. A difference of 1\% WERR is significant in this task. 
 
-Any difference of above 1\% relative is significant.
+We report results for unsupervised adaptation in Table.~\ref{tab:unsup-WER}, there we decode data against SI model and use hypothesis to align data for adaptation. There too we see 1.4-3.6\% increase in WERR across different utterances. Using 20 utterances regresses baseline unsupervised adaptation, but we at least retain performance when using confidence-scores. Low confidence data from hypothesis may also indicate, (1) lower accuracy along with, (2) weaker match to SI model. However, we find merit with emphasizing low confidence data, this indicates that out of the above two factors, weaker match to SI model dominates.
+
+% We also know that confidence can indicate a great deal about the quality of utterances that we use in adaptation but none of the current adaptation recipes include confidence, specifically: for incorrect hypothesis, (a) low confidence data is a poor match to model and may benefit with higher weight on the data, (b) low confidence results are likely to be incorrect, so we should deemphasize these utterances, (c) high confidence data is already a good match to model, so there is less to learn from that data, (d) high confidence results are likely to be correct, so we should emphasize these utterances.
+
+
 
 
 
 \begin{table}
 \begin{center}
 \begin{small}
-\caption{WER for Supervised adaptation. Baseline WER is 19.9\%.} \label{tab:mean-FA-diff}
+\caption{WER and WERR for Supervised adaptation. Baseline WER is 19.9\%.} \label{tab:sup-WER}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 Nutts &  \multicolumn{2}{|c|}{Best Adaptation} & \multicolumn{2}{|c|}{+Include} \\
@@ -48,7 +44,7 @@ Nutts &  \multicolumn{2}{|c|}{Best Adaptation} & \multicolumn{2}{|c|}{+Include} 
 \begin{table}
 \begin{center}
 \begin{small}
-\caption{WER for Unsupervised adaptation. Baseline WER is 19.9\%.} \label{tab:mean-FA-diff}
+\caption{WER and WERR for Unsupervised adaptation. Baseline WER is 19.9\%.} \label{tab:unsup-WER}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 Nutts &  \multicolumn{2}{|c|}{Best Adaptation} & \multicolumn{2}{|c|}{+Include} \\
@@ -56,7 +52,7 @@ Nutts &  \multicolumn{2}{|c|}{Best Adaptation} & \multicolumn{2}{|c|}{+Include} 
 \hline
  &   WER & WERR & WER & WERR\\
 \hline
-20 &  20.2  & -1.4  & 19.9 & 0.2\\
+20 &  20.2  & -1.4  & 19.9 & 0.0\\
 50 &  19.0  & 4.9  & 18.2 & 8.5\\
 100 &  18.0  & 9.8  & 17.7 & 11.3\\
 \hline
